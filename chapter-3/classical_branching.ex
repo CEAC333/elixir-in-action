@@ -1,6 +1,6 @@
 defmodule ClassicalBranching do
   @moduledoc """
-  Implement a `max` function with various classical branching constructs.
+  Implement a `max/2` function with various classical branching constructs.
   """
 
   @doc "if/else"
