@@ -88,7 +88,7 @@ defmodule TodoList.CsvImporter do
     |> TodoList.new
   end
 
-  @doc "Create a tuple from a row in the CSV file."
+  # Create a tuple from a row in the CSV file.
   defp tuple_from_csv([raw_date|tail]) do
     date = String.split(raw_date, "/")
     |> Enum.map(&String.to_integer(&1))
@@ -98,6 +98,24 @@ defmodule TodoList.CsvImporter do
 
     {date, String.trim(title)}
   end
+end
+
+# Make TodoList collectable (page 128)
+# Allows you to create a list of maps named `entries`
+# and insert them into a TodoList with:
+# `for entry <- entries, into: TodoList.new, do: entry`
+defimpl Collectable, for: TodoList do
+  def into(original) do
+    {original, &into_callback/2}
+  end
+
+  # The appender lambda
+  defp into_callback(todo_list, {:cont, entry}) do
+    TodoList.add_entry(todo_list, entry)
+  end
+
+  defp into_callback(todo_list, :done), do: todo_list
+  defp into_callback(todo_list, :halt), do: :ok
 end
 
 # entries = [
