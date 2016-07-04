@@ -69,6 +69,33 @@ defmodule TodoList do
   end
 end
 
+defmodule TodoList.CsvImporter do
+  @moduledoc """
+  Read in todos from a CSV file.
+  """
+  def read_todos(path) do
+    File.stream!(path)
+    |> Stream.filter(fn(line) -> String.trim(line) !== "" end)
+    |> Stream.map(&(String.replace(&1, "\n", "")))
+    |> Stream.map(&String.split(&1, ","))
+    |> Stream.map(&tuple_from_csv/1)
+    |> Enum.map(fn(todo) ->
+      %{date: {elem(todo, 0)}, title: elem(todo, 1)}
+    end)
+    |> TodoList.new
+  end
+
+  defp tuple_from_csv([raw_date|tail]) do
+    date = String.split(raw_date, "/")
+    |> Enum.map(&String.to_integer(&1))
+    |> List.to_tuple
+
+    [title|_] = tail
+
+    {date, String.trim(title)}
+  end
+end
+
 # entries = [
 #   %{date: {2013, 12, 19}, title: "dentist"},
 #   %{date: {2013, 12, 20}, title: "shopping"},
