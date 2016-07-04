@@ -26,6 +26,12 @@ defmodule TodoList do
       end)
   end
 
+  @doc "This is update_entry/2. It calls update_entry/3."
+  def update_entry(todo_list, %{} = new_entry) do
+    update_entry(todo_list, new_entry.id, fn(_) -> new_entry end)
+  end
+
+  @doc "This is update_entry/3"
   def update_entry(
     %TodoList{entries: entries} = todo_list,
     entry_id,
@@ -44,6 +50,10 @@ defmodule TodoList do
         %TodoList{todo_list | entries: new_entries}
     end
   end
+
+  # def delete_entry(todo_list, entry_id) do
+  #   HashDict.delete()
+  # end
 end
 
 # todo_list = TodoList.new |>
