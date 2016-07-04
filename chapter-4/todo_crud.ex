@@ -51,9 +51,12 @@ defmodule TodoList do
     end
   end
 
-  # def delete_entry(todo_list, entry_id) do
-  #   HashDict.delete()
-  # end
+  def delete_entry(
+      %TodoList{entries: entries} = todo_list,
+      entry_id
+    ) do
+      %TodoList{todo_list | entries: HashDict.delete(entries, entry_id)}
+  end
 end
 
 # todo_list = TodoList.new |>
@@ -74,3 +77,5 @@ end
 #   1,
 #   &Map.put(&1, :date, {2013, 12, 20})
 # )
+
+# shortened_todo_list = TodoList.delete_entry(todo_list, 2)
