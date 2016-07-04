@@ -1,1 +1,3 @@
-enum_examples.ex
+defmodule EnumExamples do
+
+end
