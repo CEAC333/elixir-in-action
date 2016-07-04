@@ -36,31 +36,28 @@ defmodule TodoList do
 
       old_entry ->
         new_entry = updater_fun.(old_entry)
-        new_entries = HashDict.puy(entries, new_entry.id, new_entry)
+        new_entries = HashDict.put(entries, new_entry.id, new_entry)
         %TodoList{todo_list | entries: new_entries}
     end
   end
 end
 
 
-# Interactive Elixir (1.3.1) - press Ctrl+C to exit (type h() ENTER for help)
-# iex(1)> tl = TodoList.new |>
-# ...(1)>   TodoList.add_entry(
-# ...(1)>     %{date: {2013, 12, 19}, title: "dentist"}
-# ...(1)>   ) |>
-# ...(1)>   TodoList.add_entry(
-# ...(1)>      %{date: {2013, 12, 20}, title: "shopping"}
-# ...(1)>   ) |>
-# ...(1)>   TodoList.add_entry(
-# ...(1)>     %{date: {2013, 12, 19}, title: "movies"}
-# ...(1)>   )
-# %TodoList{auto_id: 4,
-#  entries: #HashDict<[{2, %{date: {2013, 12, 20}, id: 2, title: "shopping"}},
-#   {3, %{date: {2013, 12, 19}, id: 3, title: "movies"}},
-#   {1, %{date: {2013, 12, 19}, id: 1, title: "dentist"}}]>}
-# iex(2)> TodoList.entries(tl
-# tl/1
-# iex(2)> TodoList.entries(tl, {2013, 12, 19})
-# [%{date: {2013, 12, 19}, id: 3, title: "movies"},
-#  %{date: {2013, 12, 19}, id: 1, title: "dentist"}]
-# iex(3)>
+todo_list = TodoList.new |>
+  TodoList.add_entry(
+    %{date: {2013, 12, 19}, title: "dentist"}
+  ) |>
+  TodoList.add_entry(
+     %{date: {2013, 12, 20}, title: "shopping"}
+  ) |>
+  TodoList.add_entry(
+    %{date: {2013, 12, 19}, title: "movies"}
+  )
+
+TodoList.entries(todo_list, {2013, 12, 19})
+
+TodoList.update_entry(
+  todo_list,
+  1,
+  &Map.put(&1, :date, {2013, 12, 20})
+)
