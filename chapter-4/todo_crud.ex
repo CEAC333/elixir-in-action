@@ -1,7 +1,17 @@
 defmodule TodoList do
   defstruct auto_id: 1, entries: HashDict.new
 
-  def new, do: %TodoList{}
+  def new(entries \\ []) do
+    Enum.reduce(
+      entries,
+      %TodoList{},
+      # Alternative to a λ: use capture operator with reversed args:
+      # `&add_entry(&2, &1)`
+      fn(entry, todo_list_acc) ->
+        add_entry(todo_list_acc, entry)
+      end
+    )
+  end
 
   def add_entry(
     %TodoList{entries: entries, auto_id: auto_id} = todo_list, entry
@@ -59,16 +69,13 @@ defmodule TodoList do
   end
 end
 
-# todo_list = TodoList.new |>
-#   TodoList.add_entry(
-#     %{date: {2013, 12, 19}, title: "dentist"}
-#   ) |>
-#   TodoList.add_entry(
-#      %{date: {2013, 12, 20}, title: "shopping"}
-#   ) |>
-#   TodoList.add_entry(
-#     %{date: {2013, 12, 19}, title: "movies"}
-#   )
+# entries = [
+#   %{date: {2013, 12, 19}, title: "dentist"},
+#   %{date: {2013, 12, 20}, title: "shopping"},
+#   %{date: {2013, 12, 19}, title: "movies"}
+# ]
+
+# todo_list = TodoList.new(entries)
 
 # TodoList.entries(todo_list, {2013, 12, 19})
 
